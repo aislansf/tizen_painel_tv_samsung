@@ -1,1 +1,117 @@
-site_name: My Docs
+site_name: DashPulse
+#site_url: https://mydomain.org/mysite
+
+
+nav:
+  - Descrição do projeto: index.md
+  - Instalação: instalacao.md
+
+
+plugins:
+  # - git-revision-date-localized:
+  #       enable_creation_date: true
+  # - mkdocs-jupyter
+  - search
+  # - mermaid2
+  - mkdocs-video
+  - glightbox:
+      touchNavigation: true
+      loop: false
+      effect: zoom
+      width: 100%
+      height: auto
+      zoomable: true
+      draggable: true
+  - awesome-pages
+  - print-site:
+        add_to_navigation: false
+        add_full_urls: false
+        add_table_of_contents: true
+        toc_title: "Sumário"
+        toc_depth: 2
+        add_full_urls: false
+        enumerate_headings: true
+        enumerate_figures: true
+        add_cover_page: true
+        # path_to_pdf: "docs/site.pdf"
+
+
+theme:
+  name: material
+  custom_dir: docs/overrides
+  icon: 
+    repo: fontawesome/brands/github
+    logo: fontawesome/solid/school
+    annotation: material/plus-circle
+
+  features:
+    - content.action.edit
+
+  palette:
+    - scheme: default
+      primary: light blue
+      accent: light blue
+      toggle:
+        icon: fontawesome/solid/toggle-on
+        name: Switch to dark mode
+    - scheme: slate
+      primary: light blue
+      accent: light blue
+      toggle:
+        icon: fontawesome/solid/toggle-off
+        name: Switch to light mode
+  features:
+    - content.code.copy
+    #- navigation.tabs
+    #- navigation.top
+    #- navegation.expand
+    #- navigation.tabs.sticky
+    #- navigation.tracking
+markdown_extensions:
+  - def_list
+  - pymdownx.tasklist:
+      custom_checkbox: true   
+  - footnotes
+  - pymdownx.arithmatex:
+      generic: true
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+      alternate_style: true
+  - attr_list
+  - md_in_html
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.keys
+
+  
+
+
+extra_javascript:
+  - assets/js/mathjax.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+  - https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/tablesort.min.js
+  - https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/sorts/tablesort.number.min.js
+  - https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/sorts/tablesort.date.min.js
+  # - https://unpkg.com/mermaid@8.8.4/dist/mermaid.min.js
+
+extra_css:
+  - assets/css/tables.css
+  - stylesheets/extra.css
+
+extra:
+  repo:
+    facts:
+      - latest
+      - stars
+      - forks

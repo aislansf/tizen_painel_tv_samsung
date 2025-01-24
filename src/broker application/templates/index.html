@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <title>MQTT exemplo</title>
+    <link rel="stylesheet" href="static/style.css">
+    <script src="static/cdnjs.cloudflare.com_ajax_libs_paho-mqtt_1.0.1_mqttws31.js"></script>
+    <script>
+        function atualizarContador(tempoRestante) {
+            document.getElementById('contador').textContent = tempoRestante;
+
+            if (tempoRestante > 0) {
+                setTimeout(function () {
+                    atualizarContador(tempoRestante - 1);
+                }, 1000);
+            } else {
+                document.getElementById('contador').textContent = "";
+                console.log("Código executado após o tempo especificado.");
+            }
+        }
+        // Configuração do broker MQTT
+        var mqttBroker = "{{IP_HOST_MQTT_WS}}";
+        var mqttPort = {{ PORT_MQTT_WS }};
+        var mqttTopic = "{{TV_NAME}}";
+        var box = document.getElementById('status');
+        // Criar um cliente MQTT
+        var mqttClient = new Paho.MQTT.Client(mqttBroker, mqttPort, 'client-' + Date.now() + Math.ceil(Math.random() * 1000));
+
+        // Função de callback para quando a conexão MQTT for estabelecida
+        function onConnect() {
+            console.log('Conexão MQTT estabelecida');
+            mqttClient.subscribe(mqttTopic);
+            var box = document.getElementById('status');
+            box.style.backgroundColor = 'green';
+            box.style.borderTop = '8px solid green';
+        }
+
+        // Função de callback para quando uma inscrição MQTT falhar
+        function onSubscribeFailure(err) {
+            console.log('Falha na inscrição MQTT:', err.errorMessage);
+            var box = document.getElementById('status');
+            box.style.backgroundColor = 'red';
+            box.style.borderTop = '18px solid red';
+        }
+
+        // Função de callback para quando uma mensagem MQTT for recebida
+        function onMessageReceived(message) {
+            var payload = message.payloadString;
+            console.log('Mensagem MQTT recebida:', payload);
+
+            // Atualizar o conteúdo na página com a mensagem recebida
+            document.getElementById('message').textContent = payload;
+            var msgs = payload.split('*');
+            console.log();
+            if (msgs[0] == 'iframe') {
+                var box = document.getElementById('standby');
+                var iframe = document.getElementById('message');
+                box.style.backgroundColor = msgs[3];
+                box.style.display = "block";
+                iframe.style.display = "none";
+
+                document.getElementById('titulo').innerHTML = msgs[2];
+                document.getElementById('titulo').style.color = msgs[4];
+                iframe.innerHTML = '<iframe  height="1700" width="100%" src="' + msgs[1] + '"></iframe>';
+                // tempo em segundos
+                var tempoTotal = 5;
+                // Inicia o contador
+                atualizarContador(tempoTotal);
+                // Espera por 5 segundos
+                setTimeout(function () {
+                    // O código abaixo será executado após a pausa de 5 segundos
+                    box.style.display = "none";
+                    iframe.style.display = "block";
+                }, tempoTotal * 1000);
+
+            } else if (msgs[0] == 'standby') {
+                var box = document.getElementById('standby');
+                var iframe = document.getElementById('message');
+                box.style.backgroundColor = msgs[3];
+                box.style.display = "block";
+                iframe.style.display = "none";
+
+                document.getElementById('titulo').innerHTML = msgs[2];
+                document.getElementById('titulo').style.color = msgs[4];
+                iframe.innerHTML = '<iframe  height="1700" width="100%" src="' + msgs[1] + '"></iframe>';
+                // Defina o tempo em segundos
+                var tempoTotal = 5;
+                // Iniciar o contador
+                atualizarContador(tempoTotal);
+            } else if (msgs[0] == 'reload') {
+                location.reload();
+            }
+        }
+
+        // Configurar os callbacks MQTT
+        mqttClient.onConnectionLost = function (responseObject) {
+            if (responseObject.errorCode !== 0) {
+                console.log('Conexão MQTT perdida:', responseObject.errorMessage);
+                // Conectar ao broker MQTT
+                mqttClient.connect({ onSuccess: onConnect });
+                var box = document.getElementById('status');
+                box.style.backgroundColor = 'red';
+                box.style.borderTop = '18px solid red';
+            }
+            console.log(responseObject.errorCode);
+        };
+
+
+        mqttClient.onMessageArrived = onMessageReceived;
+
+        // Conectar ao broker MQTT
+        mqttClient.connect({ onSuccess: onConnect });
+
+    </script>
+
+</head>
+
+<body>
+
+    <div id="contador"></div>
+    <div id="standby">
+        <div class="center">
+            <font id="textcolor" size="10" face="Verdana">
+                <h1 id="titulo">
+                </h1>
+            </font>
+        </div>
+    </div>
+    <div id="message">
+        <div class="loading"></div>
+    </div>
+    <div id="status"></div>
+</body>
+
+</html>

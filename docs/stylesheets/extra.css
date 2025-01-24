@@ -1,0 +1,22 @@
+.youtube {
+    color: #EE0F0F;
+  }
+
+.running {
+    color: #FF9100;
+  }  
+
+.check_green{
+    color: #06D001;
+  }
+
+.check_gray{
+    color: #EEEEEE;
+  }
+
+.md-tooltip {
+    top: inherit;
+    left: inherit;
+    margin-left: 12px;
+    margin-top: 7px;
+}
