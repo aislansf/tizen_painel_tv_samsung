@@ -2,7 +2,7 @@ from flask import Flask, render_template
 import paho.mqtt.client as mqtt
 
 PORT_MQTT_WS = 8081
-IP_HOST_MQTT_WS = '192.168.0.100'
+IP_HOST_MQTT_WS = 'BROKER_IP'
 TVs_NAME = ['L1C0','L1C1','L1C2','L1C3','L1C4',
             'L2C0','L2C1','L2C2','L2C3','L2C4']
 

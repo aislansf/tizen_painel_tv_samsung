@@ -287,3 +287,45 @@ cd tizen_painel_tv_samsung && ls
 Se no seu terminal aparecer os dados como os listados na imagem acima, você conseguiu clonar o projeto com sucesso.
 
 ## Editando arquivos do projeto
+
+O DashPulse, deve conectar-se ao ``IP do Broker`` local que foi instalado anteriormente na sua máquina. Para realizar a alterção do endereço de ip deve-se alterar no arquivo ``app.py``.
+
+Arquivo ``app.py``
+
+Acesse a área do projeto para localizar o arquivo app.py e abra com qualquer editor de texto do seu uso. Localize a variável ``IP_HOST_MQTT_WS`` e no conteúdo substitua `BROKER_IP` por `localhost`
+
+```
+C:\tizen_painel_tv_samsung\src\broker application\app.py
+```
+
+![](images/file_app.png)
+![](images/file_app_localhost.png)
+
+## Iniciando aplicação
+
+Uma vez instalado todas as dependências já apresentadas anteriormente, o primeiro passo é iniciar o `docker` para iniciar o container do projeto.
+
+### Carregando docker
+
+1. Pressione o botão ++windows++
+2. Abra o ``docker desktop``
+3. Verifique se o ``docker desktop`` está no modo `running`
+![](images/docker_done.png)
+4. Abra um terminal de comandos
+5. Acesse o local do projeto e acesse o diretório `broker application` 
+```
+cd 'C:\tizen_painel_tv_samsung\src\broker application\'
+```
+![](images/file_broker.png)
+6. Uma vez na pasta do `broker application` é deve-se iniciar o container do projeto utilizando o comando:
+```
+docker-compose up -d
+```
+7. Após a execução do comando aguarde as configurações do container e a publicação do mesmo para que seja disponível para uso. Ao encerrar `service labtvs` ficará com o status `Built`, `Network brokerapplication_default` ficará com o status `Created` e ``Container labtvs-homolog`` ficará com o ``Started``
+![](images/file_docker_run.png)
+![](images/file_docker_done.png)
+8. Feito isso, você poderá abrir uma página do browser em seu computador e digitar o comando abaixo, se tudo funcionar bem você verá um loading na tela
+```
+http://localhost:1130/L1C0
+```
+![](images/file_browser.png)
